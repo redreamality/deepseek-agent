@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>DeepSeek Agent — Go deeper than answers</title>
+  <meta name="description" content="DeepSeek Agent runs on DeepSeek-V4: a 1.6T-parameter open frontier model with a 1-million-token context, native tool-calling and multi-step reasoning. Frontier intelligence, abyssal prices." />
+  <meta name="color-scheme" content="dark" />
+  <meta property="og:title" content="DeepSeek Agent — Go deeper than answers" />
+  <meta property="og:description" content="An autonomous agent powered by DeepSeek-V4. 1M-token mind. Native tools. MIT open weights." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    /* Progressive enhancement: pre-hide content for the intro only if ES modules
+       are supported. A safety timer reveals everything if the module never boots
+       (e.g. opened from file:// where module loading is blocked by CORS). */
+    (function () {
+      var d = document.documentElement;
+      d.classList.remove('no-js');
+      if ('noModule' in HTMLScriptElement.prototype) {
+        d.classList.add('anim');
+        setTimeout(function () {
+          if (!d.classList.contains('booted')) {
+            d.classList.remove('anim');
+            d.classList.add('no-anim');
+          }
+        }, 4000);
+      }
+    })();
+  </script>
+</head>
+<body>
+  <!-- abyssal depth background -->
+  <canvas id="plankton" aria-hidden="true"></canvas>
+  <div class="caustics" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- loader -->
+  <div id="loader" class="loader" aria-hidden="true">
+    <div class="loader-rule"></div>
+    <div class="loader-meta">
+      <span class="loader-tag">SOUNDING THE DEEP</span>
+      <span class="loader-count"><span id="loaderNum">0</span><span class="loader-pct">%</span></span>
+    </div>
+  </div>
+
+  <!-- nav -->
+  <header class="nav" id="nav">
+    <a class="nav-brand" href="#hero" aria-label="DeepSeek Agent home">
+      <svg class="nav-mark" viewBox="0 0 240 150" aria-hidden="true">
+        <path class="whale-mini" d="M20,92 C20,62 56,44 104,44 C150,44 182,60 206,58 C218,57 224,48 230,38 C233,52 230,66 220,75 C229,84 234,96 236,108 C219,103 206,95 196,86 C172,100 142,104 104,104 C56,104 20,104 20,92 Z" />
+      </svg>
+      <span class="nav-wordmark">DeepSeek<span class="nav-sub">·Agent</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#model" data-nav>Model</a>
+      <a href="#agentic" data-nav>Agentic</a>
+      <a href="#pricing" data-nav>Pricing</a>
+      <a href="#open" data-nav>Open</a>
+      <a class="nav-cta" href="#cta">Get started</a>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- ============================ HERO ============================ -->
+    <section class="hero" id="hero">
+      <div class="hero-grid" aria-hidden="true"></div>
+
+      <!-- sonar emblem -->
+      <div class="sonar" aria-hidden="true">
+        <svg class="sonar-svg" viewBox="0 0 600 600">
+          <circle class="sonar-ring" cx="300" cy="300" r="90" />
+          <circle class="sonar-ring" cx="300" cy="300" r="150" />
+          <circle class="sonar-ring" cx="300" cy="300" r="220" />
+          <circle class="sonar-ring" cx="300" cy="300" r="290" />
+          <line class="sonar-sweep" x1="300" y1="300" x2="300" y2="40" />
+        </svg>
+      </div>
+
+      <div class="hero-inner">
+        <div class="hero-badge" data-hero="badge">
+          <span class="dot-live"></span> DeepSeek-V4 · preview · MIT open weights
+        </div>
+
+        <!-- whale logo, line-drawn -->
+        <svg class="hero-whale" viewBox="0 0 240 150" aria-label="DeepSeek whale" data-hero="whale">
+          <path class="whale-body" d="M20,92 C20,62 56,44 104,44 C150,44 182,60 206,58 C218,57 224,48 230,38 C233,52 230,66 220,75 C229,84 234,96 236,108 C219,103 206,95 196,86 C172,100 142,104 104,104 C56,104 20,104 20,92 Z" />
+          <path class="whale-belly" d="M40,96 C70,108 150,108 186,90" />
+          <circle class="whale-eye" cx="60" cy="80" r="3.6" />
+          <path class="whale-spout" d="M44,40 C44,30 40,24 36,18 M52,40 C52,28 54,22 58,16 M48,40 C48,30 48,22 48,14" />
+        </svg>
+
+        <h1 class="hero-title">
+          <span class="line" data-split>Go deeper than answers.</span>
+          <span class="line accent" data-split>Deploy an agent that thinks</span><span class="brand-dot" data-hero="dot">.</span>
+        </h1>
+
+        <p class="hero-sub" data-hero="sub">
+          DeepSeek&nbsp;Agent runs on <strong>DeepSeek-V4</strong> — a 1.6&nbsp;trillion-parameter open frontier model
+          with a <strong>1-million-token</strong> mind, native tool-calling and multi-step reasoning.
+          <span class="sub-quiet">The whale just learned to act.</span>
+        </p>
+
+        <div class="hero-stat" data-hero="stat">
+          <span class="num" data-to="1000000" data-format="comma">0</span>
+          <span class="hero-stat-label">token context window — one continuous train of thought</span>
+        </div>
+
+        <div class="hero-actions" data-hero="actions">
+          <a class="btn btn-primary" href="#cta">
+            <span>Dive in</span>
+            <svg viewBox="0 0 24 24" class="btn-arrow" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <code class="npm-chip" data-copy="npm i deepseek-agent">
+            <span class="npm-prompt">$</span> npm i deepseek-agent
+            <span class="npm-copied">copied</span>
+          </code>
+        </div>
+      </div>
+
+      <a class="scroll-hint" href="#what" data-hero="hint" aria-label="Scroll to explore">
+        <span>Descend</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </a>
+    </section>
+
+    <!-- ============================ WHAT ============================ -->
+    <section class="section section-what" id="what" data-section>
+      <div class="wrap">
+        <span class="kick" data-label="01 · THE SHIFT"></span>
+        <h2 class="section-title big" data-split>An agent, not just an answer.</h2>
+        <p class="lede" data-reveal>
+          DeepSeek&nbsp;Agent doesn't simply reply. It <em>plans</em>, <em>calls tools</em>, researches across
+          the web and your codebase, and executes multi-step work — all while holding the full context of the
+          task in a single 1M-token train of thought. One model. Released 2026-04-24. Open to everyone.
+        </p>
+
+        <ol class="pipeline" aria-label="Agent loop">
+          <li class="pstep" data-step><span class="pstep-n">1</span><span class="pstep-k" data-label="PLAN"></span><p>Decompose the goal into a route of steps.</p></li>
+          <li class="pstep" data-step><span class="pstep-n">2</span><span class="pstep-k" data-label="CALL"></span><p>Invoke up to 128 tools, in parallel.</p></li>
+          <li class="pstep" data-step><span class="pstep-n">3</span><span class="pstep-k" data-label="REASON"></span><p>Hold full history across 100+ turns.</p></li>
+          <li class="pstep" data-step><span class="pstep-n">4</span><span class="pstep-k" data-label="ACT"></span><p>Execute, verify, and deliver.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============================ MODEL ============================ -->
+    <section class="section section-model" id="model" data-section>
+      <div class="wrap">
+        <span class="kick" data-label="02 · THE ENGINE"></span>
+        <h2 class="section-title" data-split>DeepSeek-V4 — the engine in the deep.</h2>
+        <p class="lede" data-reveal>
+          Two open MoE models, MIT-licensed. A hybrid sparse-attention stack means frontier scale,
+          engineered to run cheap.
+        </p>
+
+        <div class="stat-trio">
+          <div class="stat-card" data-card>
+            <div class="stat-figure"><span class="num" data-to="1.6" data-decimals="1" data-suffix="T">0</span></div>
+            <div class="stat-cap">total parameters · V4-Pro</div>
+          </div>
+          <div class="stat-card" data-card>
+            <div class="stat-figure"><span class="num" data-to="49" data-suffix="B">0</span></div>
+            <div class="stat-cap">active per token · MoE routing</div>
+          </div>
+          <div class="stat-card" data-card>
+            <div class="stat-figure"><span class="num" data-to="33" data-suffix="T">0</span></div>
+            <div class="stat-cap">tokens of pretraining corpus</div>
+          </div>
+        </div>
+
+        <div class="spec-row" data-reveal>
+          <span class="spec"><b data-label="CONTEXT"></b>1,000,000 tokens</span>
+          <span class="spec"><b data-label="OUTPUT"></b>up to 384K</span>
+          <span class="spec"><b data-label="FLASH"></b>284B · 13B active</span>
+          <span class="spec"><b data-label="LICENSE"></b>MIT open weights</span>
+        </div>
+
+        <div class="effic" data-reveal>
+          <p class="effic-head">At full 1M context, versus V3.2 — <span class="lower">lower is better</span></p>
+          <div class="effic-bar" data-eff><label>Per-token inference FLOPs</label><div class="ebar"><span class="efill" data-w="27"></span></div><b class="num" data-to="27" data-suffix="%">0</b></div>
+          <div class="effic-bar" data-eff><label>KV cache footprint</label><div class="ebar"><span class="efill teal" data-w="10"></span></div><b class="num" data-to="10" data-suffix="%">0</b></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ AGENTIC ============================ -->
+    <section class="section section-agentic" id="agentic" data-section>
+      <div class="wrap">
+        <span class="kick" data-label="03 · THE MIND"></span>
+        <h2 class="section-title" data-split>Reasoning that holds the line.</h2>
+        <p class="lede" data-reveal>
+          Native function calling — up to 128 functions per request, parallel, with strict JSON-schema
+          validation. A <code>reasoning_effort</code> dial lets the agent think harder when it matters,
+          and V4 keeps complete reasoning history across <strong>100+ turns</strong> of tool use without context collapse.
+        </p>
+
+        <div class="agent-stage" data-reveal>
+          <svg class="circuit" viewBox="0 0 820 380" aria-hidden="true">
+            <path class="wire" d="M150,190 C260,190 300,80 430,80" data-wire />
+            <path class="wire" d="M150,190 C260,190 300,150 430,150" data-wire />
+            <path class="wire" d="M150,190 C260,190 300,230 430,230" data-wire />
+            <path class="wire" d="M150,190 C260,190 300,300 430,300" data-wire />
+            <circle class="core" cx="150" cy="190" r="46" />
+            <g class="tnode" data-tnode><circle cx="470" cy="80" r="9"/></g>
+            <g class="tnode" data-tnode><circle cx="470" cy="150" r="9"/></g>
+            <g class="tnode" data-tnode><circle cx="470" cy="230" r="9"/></g>
+            <g class="tnode" data-tnode><circle cx="470" cy="300" r="9"/></g>
+          </svg>
+          <div class="circuit-labels">
+            <span class="clab core-lab">AGENT</span>
+            <span class="clab" style="top:14%">web.search()</span>
+            <span class="clab" style="top:35%">code.run()</span>
+            <span class="clab" style="top:56%">browser.act()</span>
+            <span class="clab" style="top:75%">files.read()</span>
+          </div>
+        </div>
+
+        <div class="effort" data-reveal>
+          <div class="effort-track" id="effortTrack">
+            <div class="effort-fill" id="effortFill"></div>
+            <div class="effort-stop" style="left:0%"></div>
+            <div class="effort-stop" style="left:50%"></div>
+            <div class="effort-stop" style="left:100%"></div>
+            <button class="effort-thumb" id="effortThumb" aria-label="reasoning effort"></button>
+          </div>
+          <div class="effort-stops"><span>Non-think</span><span>Think · High</span><span>Think · Max</span></div>
+          <div class="effort-readout"><code>reasoning_effort</code> = <span id="effortVal">max</span> · drag me</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ BENCHMARKS ============================ -->
+    <section class="section section-bench" id="benchmarks" data-section>
+      <div class="wrap">
+        <span class="kick" data-label="04 · THE PROOF"></span>
+        <h2 class="section-title" data-split>It codes like a champion.</h2>
+        <p class="lede" data-reveal>
+          DeepSeek-V4-Pro posts the highest SWE-bench Verified of any open-weights model — level with
+          Gemini&nbsp;3.1&nbsp;Pro, within striking distance of Claude&nbsp;Opus.
+          <span class="sub-quiet">Vendor-reported, preview-stage — verify on your own harness.</span>
+        </p>
+
+        <div class="bars" data-reveal>
+          <div class="bench" data-bench><span class="bench-name">SWE-bench Verified</span><div class="track"><span class="fill hero-bar" data-w="80.6"></span></div><b class="num" data-to="80.6" data-decimals="1" data-suffix="%">0</b></div>
+          <div class="bench" data-bench><span class="bench-name">LiveCodeBench Pass@1</span><div class="track"><span class="fill" data-w="93.5"></span></div><b class="num" data-to="93.5" data-decimals="1" data-suffix="%">0</b></div>
+          <div class="bench" data-bench><span class="bench-name">GPQA Diamond</span><div class="track"><span class="fill" data-w="90.1"></span></div><b class="num" data-to="90.1" data-decimals="1" data-suffix="%">0</b></div>
+          <div class="bench" data-bench><span class="bench-name">MMLU-Pro</span><div class="track"><span class="fill" data-w="87.5"></span></div><b class="num" data-to="87.5" data-decimals="1" data-suffix="%">0</b></div>
+          <div class="bench" data-bench><span class="bench-name">BrowseComp</span><div class="track"><span class="fill" data-w="83.4"></span></div><b class="num" data-to="83.4" data-decimals="1" data-suffix="%">0</b></div>
+          <div class="bench" data-bench><span class="bench-name">Terminal-Bench 2.0</span><div class="track"><span class="fill dim" data-w="67.9"></span></div><b class="num" data-to="67.9" data-decimals="1" data-suffix="%">0</b></div>
+        </div>
+
+        <div class="elo" data-reveal>
+          <span class="elo-num num" data-to="3206" data-format="comma">0</span>
+          <span class="elo-cap">Codeforces rating — roughly a <b>top-25</b> human competitor</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ API ============================ -->
+    <section class="section section-api" id="api" data-section>
+      <div class="wrap">
+        <span class="kick" data-label="05 · THE SWITCH"></span>
+        <h2 class="section-title" data-split>Drop-in compatible. Change one line.</h2>
+        <p class="lede" data-reveal>
+          Point <code>base_url</code> at <code>api.deepseek.com</code> and your existing OpenAI SDK just works —
+          or use the Anthropic-compatible endpoint at <code>/anthropic</code>. Same auth, same calls; migration
+          is changing the model name. Back-end for Claude&nbsp;Code, OpenCode and OpenClaw out of the box.
+        </p>
+
+        <div class="code-card" data-reveal>
+          <div class="code-top"><span class="cdot"></span><span class="cdot"></span><span class="cdot"></span><span class="code-file">migrate.py</span></div>
+          <pre class="code"><code id="codeBlock"></code><span class="caret" id="caret"></span></pre>
+        </div>
+
+        <div class="latency" data-reveal>
+          <label>128K prompt · time to first token (on-disk cache)</label>
+          <div class="lat-track"><span class="lat-fill" id="latFill"></span></div>
+          <div class="lat-vals"><span>cache miss <b>13.0s</b></span><span class="lat-win">cache hit <b>~0.5s</b></span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ PRICING ============================ -->
+    <section class="section section-pricing" id="pricing" data-section>
+      <div class="wrap">
+        <span class="kick" data-label="06 · THE FLOOR"></span>
+        <h2 class="section-title" data-split>Frontier intelligence, abyssal prices.</h2>
+        <p class="lede" data-reveal>
+          DeepSeek didn't lower the price. It moved the floor. New accounts get
+          <strong>5,000,000</strong> free tokens, no card required.
+        </p>
+
+        <div class="price-grid">
+          <div class="price-card" data-card>
+            <div class="price-name" data-label="V4-FLASH">deepseek-v4-flash</div>
+            <div class="price-rows">
+              <div><span>input</span><b>$0.14</b></div>
+              <div><span>output</span><b>$0.28</b></div>
+              <div class="price-hit"><span>cache hit</span><b>$0.0028</b></div>
+            </div>
+            <p class="price-note">per million tokens · low-latency, broad coverage</p>
+          </div>
+          <div class="price-card feat" data-card>
+            <div class="price-name" data-label="V4-PRO">deepseek-v4-pro</div>
+            <div class="price-rows">
+              <div><span>input</span><b>$0.435</b></div>
+              <div><span>output</span><b>$0.87</b></div>
+              <div class="price-hit"><span>cache hit</span><b>$0.003625</b></div>
+            </div>
+            <p class="price-note">per million tokens · flagship reasoning &amp; agentic coding</p>
+          </div>
+        </div>
+
+        <div class="compare" data-reveal>
+          <p class="compare-head">Output price per million tokens — to scale</p>
+          <div class="crow" data-crow><span class="cname">DeepSeek V4-Flash</span><div class="cbar-track"><span class="cbar win" data-w="1.1"></span></div><b>$0.28</b></div>
+          <div class="crow" data-crow><span class="cname">GPT-4o</span><div class="cbar-track"><span class="cbar" data-w="40"></span></div><b>$10</b></div>
+          <div class="crow" data-crow><span class="cname">Claude Opus</span><div class="cbar-track"><span class="cbar" data-w="100"></span></div><b>$25</b></div>
+          <div class="multiplier" data-reveal>up to <span class="num" data-to="35" data-suffix="×">0</span> cheaper</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ OPEN ============================ -->
+    <section class="section section-open" id="open" data-section>
+      <div class="wrap">
+        <span class="kick" data-label="07 · THE COMMONS"></span>
+        <h2 class="section-title" data-split>Open weights. MIT. Yours to keep.</h2>
+        <p class="lede" data-reveal>
+          Commercial use, modification, redistribution, self-hosting — all free. V4-Pro drew
+          <strong>~3.38M</strong> downloads in a single month. Run it in our API or on your own GPUs.
+          No lock-in. No gatekeeper.
+        </p>
+
+        <div class="open-stage" data-reveal>
+          <svg class="mit-badge" viewBox="0 0 120 120" aria-hidden="true">
+            <circle class="mit-ring" cx="60" cy="60" r="52" />
+            <text class="mit-text" x="60" y="72">MIT</text>
+          </svg>
+          <div class="tile-grid">
+            <span class="tile" data-tile>V4-Pro</span>
+            <span class="tile" data-tile>V4-Flash</span>
+            <span class="tile" data-tile>R1-Distill-70B</span>
+            <span class="tile" data-tile>R1-Distill-32B</span>
+            <span class="tile" data-tile>Coder-V2</span>
+            <span class="tile" data-tile>Math-V2</span>
+            <span class="tile" data-tile>VL2</span>
+            <span class="tile" data-tile>OCR</span>
+            <span class="tile" data-tile>Prover</span>
+            <span class="tile" data-tile>V3.2-Speciale</span>
+            <span class="tile" data-tile>+ 500 forks</span>
+            <span class="tile" data-tile>your fork</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ ECOSYSTEM ============================ -->
+    <section class="section section-eco" id="ecosystem" data-section>
+      <div class="wrap">
+        <span class="kick" data-label="08 · THE CURRENT"></span>
+        <h2 class="section-title" data-split>A whale-sized ecosystem.</h2>
+        <p class="lede" data-reveal>
+          Built by a ~150–200 person research-first lab — the same team whose R1 release wiped
+          <strong>~$589B</strong> off Nvidia in a single day. V4 plugs into clouds, phone makers and
+          agent frameworks through an OpenAI-compatible surface.
+        </p>
+
+        <div class="whale-track" data-reveal aria-hidden="true">
+          <svg viewBox="0 0 1000 200" class="whale-track-svg" preserveAspectRatio="none">
+            <path id="whalePath" class="whale-path" d="M-40,150 C150,60 320,60 500,120 C680,180 840,150 1040,70" />
+          </svg>
+          <svg class="glider" viewBox="0 0 240 150" id="whaleGlider">
+            <path d="M20,92 C20,62 56,44 104,44 C150,44 182,60 206,58 C218,57 224,48 230,38 C233,52 230,66 220,75 C229,84 234,96 236,108 C219,103 206,95 196,86 C172,100 142,104 104,104 C56,104 20,104 20,92 Z"/>
+          </svg>
+        </div>
+
+        <div class="logo-wall">
+          <span class="logo-item" data-logo>Tencent</span>
+          <span class="logo-item" data-logo>Alibaba&nbsp;Cloud</span>
+          <span class="logo-item" data-logo>Huawei&nbsp;Cloud</span>
+          <span class="logo-item" data-logo>Volcano&nbsp;Engine</span>
+          <span class="logo-item" data-logo>OPPO</span>
+          <span class="logo-item" data-logo>vivo</span>
+          <span class="logo-item" data-logo>Honor</span>
+          <span class="logo-item" data-logo>Hugging&nbsp;Face</span>
+          <span class="logo-item" data-logo>vLLM</span>
+          <span class="logo-item" data-logo>Ollama</span>
+          <span class="logo-item" data-logo>Claude&nbsp;Code</span>
+          <span class="logo-item" data-logo>OpenCode</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ CTA ============================ -->
+    <section class="section section-cta" id="cta" data-section>
+      <div class="cta-sonar" aria-hidden="true">
+        <svg viewBox="0 0 600 600" class="cta-sonar-svg">
+          <circle class="cta-ring" cx="300" cy="300" r="260" />
+          <circle class="cta-ring" cx="300" cy="300" r="190" />
+          <circle class="cta-ring" cx="300" cy="300" r="120" />
+          <circle class="cta-dot" cx="300" cy="300" r="9" />
+        </svg>
+      </div>
+      <div class="wrap cta-wrap">
+        <span class="kick center" data-label="09 · DESCEND"></span>
+        <h2 class="section-title big" data-split>The deep is open. Start seeking.</h2>
+        <p class="lede center" data-reveal>
+          Spin up a DeepSeek&nbsp;Agent in minutes — OpenAI-compatible API, MIT weights, a 1M-token context,
+          and 5M free tokens to start. Bring your own framework, or use ours.
+        </p>
+        <div class="hero-actions center" data-reveal>
+          <a class="btn btn-primary" href="https://platform.deepseek.com" target="_blank" rel="noopener">
+            <span>Start building</span>
+            <svg viewBox="0 0 24 24" class="btn-arrow" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <code class="npm-chip" data-copy="npm i deepseek-agent">
+            <span class="npm-prompt">$</span> npm i deepseek-agent
+            <span class="npm-copied">copied</span>
+          </code>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-foot">
+    <div class="foot-inner">
+      <div class="foot-mark">
+        <svg viewBox="0 0 240 150" aria-hidden="true" class="foot-whale">
+          <path d="M20,92 C20,62 56,44 104,44 C150,44 182,60 206,58 C218,57 224,48 230,38 C233,52 230,66 220,75 C229,84 234,96 236,108 C219,103 206,95 196,86 C172,100 142,104 104,104 C56,104 20,104 20,92 Z"/>
+        </svg>
+        <span>DeepSeek<span class="nav-sub">·Agent</span></span>
+      </div>
+      <p class="foot-disclaimer">
+        An independent showcase celebrating DeepSeek-V4. Figures are sourced from DeepSeek's official docs,
+        GitHub, Hugging Face and press as of June 2026; many V4 benchmarks are <em>vendor-reported / preview-stage</em> —
+        verify on your own harness. Not affiliated with DeepSeek. Design inspired by the craft of anime.js.
+      </p>
+      <p class="foot-credit">Made with <a href="https://animejs.com" target="_blank" rel="noopener">anime.js</a> · deepseek-agent.com</p>
+    </div>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

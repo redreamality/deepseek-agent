@@ -1,0 +1,14 @@
+{
+  "name": "deepseek-agent-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Animated landing page for DeepSeek Agent (DeepSeek-V4)",
+  "scripts": {
+    "serve": "node serve.mjs",
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0"
+  }
+}
