@@ -26,3 +26,13 @@
 
 ## 交互改动后
 - 按全局规范：**改交互细节必须补对应 e2e**（`tests/home.spec.mjs`）。改完跑 `pnpm exec playwright test`。
+
+## 部署 GitHub Pages（本网络环境关键）
+- **`git push` 到 github.com 会被重置/连不上**（`Recv failure: Connection was reset` / `Couldn't connect to github.com:443`），但 **`api.github.com` 可通**（`gh api` 正常）。
+  → 用 **Git Data API 推送**：`node push.mjs`（blobs→tree→commit→ref，走 api.github.com）。本仓库已带该脚本（已 gitignore）。
+- **空仓库**直接调 Git Data API 建 blob 会 `409 Git Repository is empty`。
+  → 先用 **Contents API**（`PUT .../contents/.nojekyll`）引导一次初始提交，再走 Git Data API。push.mjs 已自动处理。
+- **`gh api` 端点别带前导 `/`**：MSYS 会把 `/repos/...` 误转成 `C:/Program Files/Git/repos/...`。写成 `gh api repos/owner/repo/...`，并加 `MSYS_NO_PATHCONV=1`。
+- 启用 Pages：`echo '{"source":{"branch":"main","path":"/"}}' | MSYS_NO_PATHCONV=1 gh api --method POST repos/OWNER/REPO/pages --input -`。仓库根放 `.nojekyll` 跳过 Jekyll。
+- **WebSearch/WebFetch 抓不了 github.com / raw.githubusercontent.com**（返回 "Unable to verify if domain is safe"）。读仓库内容用 `gh api repos/OWNER/REPO/contents/PATH --jq .content | base64 -d`；查 star/列表用 `gh api orgs/OWNER/repos`。
+- 站点地址：`https://redreamality.com/deepseek-agent/`（账号绑定了自定义域 redreamality.com）。
