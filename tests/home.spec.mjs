@@ -84,11 +84,29 @@ test('api section types out the code block with the swapped model name', async (
   await expect(page.locator('#codeBlock')).toContainText('api.deepseek.com');
 });
 
+test('open section shows official repos with live star counters', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('#open').scrollIntoViewIfNeeded();
+  await expect(page.locator('#open .gh-chip')).toHaveCount(8);
+  await expect(page.locator('#open .gh-chip').first().locator('.num')).toHaveText(/103\.7k/, { timeout: 9000 });
+  await expect(page.locator('#open .gh-chip').first()).toHaveAttribute('href', /github\.com\/deepseek-ai\/DeepSeek-V3/);
+});
+
+test('repos constellation: 10 community agents with star counters and links', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('#repos').scrollIntoViewIfNeeded();
+  await expect(page.locator('#repos .repo')).toHaveCount(10);
+  const first = page.locator('#repos .repo').first();
+  await expect(first).toHaveAttribute('href', /github\.com\/Hmbown\/DeepSeek-TUI/);
+  await expect(first.locator('.num')).toHaveText(/38\.2k/, { timeout: 9000 });
+  await expect(page.locator('#repos .repo-foot a').first()).toHaveAttribute('href', /awesome-deepseek-agent/);
+});
+
 test('captures hero + full-page screenshots', async ({ page }) => {
   await page.goto('/');
   await page.waitForTimeout(6200); // let the full intro timeline settle
   await page.screenshot({ path: 'tests/__screenshots__/hero.png' });
-  for (const id of ['what', 'model', 'agentic', 'benchmarks', 'api', 'pricing', 'open', 'ecosystem', 'cta']) {
+  for (const id of ['what', 'model', 'agentic', 'benchmarks', 'api', 'pricing', 'open', 'repos', 'ecosystem', 'cta']) {
     await page.locator('#' + id).scrollIntoViewIfNeeded();
     await page.waitForTimeout(550);
   }
